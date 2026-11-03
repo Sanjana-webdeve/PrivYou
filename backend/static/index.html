@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PrivYou</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#150d09;--stone:#241711;--gold:#d9ad45;--gold-d:#8a6a1f;--parch:#ecdcb8;--ink:#2b1a10;--ruby:#e0707c}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--parch);font:18px/1.5 Georgia,serif;
+ background:radial-gradient(ellipse 70% 40% at 50% 0,#5a3a12 0,transparent 70%),repeating-linear-gradient(0deg,#0000 0 46px,#0003 46px 48px),var(--night)}
+h1,h2,h3,button,label{font-family:Cinzel,Georgia,serif}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 20px 80px}
+.card{max-width:440px;margin:8vh auto;padding:32px;background:var(--stone);border:2px solid var(--gold-d);border-radius:18px 18px 6px 6px;box-shadow:0 0 0 6px #0006,0 20px 60px #000a}
+.card h1{margin:0 0 4px;text-align:center;color:var(--gold);font-size:34px;letter-spacing:.06em}
+.card .sub{text-align:center;margin:0 0 20px;opacity:.8}
+input,textarea{width:100%;padding:12px 14px;margin:6px 0;background:#0005;border:1px solid var(--gold-d);border-radius:6px;color:var(--parch);font:inherit}
+button{cursor:pointer;padding:11px 20px;border-radius:6px;border:1px solid var(--gold);background:linear-gradient(#e6bd55,#b88a2a);color:#2b1a10;font-weight:700;letter-spacing:.04em}
+button.ghost{background:none;color:var(--gold)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:14px}
+a.lnk{color:var(--gold);cursor:pointer;text-decoration:underline}
+.msg{min-height:1.4em;color:var(--ruby);margin:8px 0 0}.msg.ok{color:#8fd19e}
+.hint{font-size:14px;opacity:.75;margin:2px 0 8px}
+.rk{font:700 22px/1.4 ui-monospace,monospace;letter-spacing:.08em;text-align:center;padding:16px;border:2px dashed var(--gold);border-radius:8px;margin:14px 0;user-select:all;word-break:break-all}
+.top{display:flex;justify-content:space-between;align-items:center}
+.top h2{margin:0;color:var(--gold);letter-spacing:.1em}
+.hello{text-align:center;margin:28px 0 36px}
+.hello h1{font-size:clamp(28px,5vw,46px);color:var(--gold);margin:0 0 12px}
+.hello blockquote{font:700 clamp(24px,3.4vw,32px)/1.3 Caveat,cursive;max-width:640px;margin:0 auto;padding:14px 22px;border-top:1px solid var(--gold-d);border-bottom:1px solid var(--gold-d)}
+.shelf{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;padding-top:10px}
+.book{position:relative;width:190px;height:260px;border:0;padding:0;border-radius:4px 12px 12px 4px;color:#f6e7bd;text-align:center;
+ background:linear-gradient(90deg,#0006 0 14px,#0000 18px),repeating-linear-gradient(45deg,#fff1 0 2px,#0000 2px 5px),var(--c);
+ box-shadow:6px 0 0 -1px #f1e4c0,8px 2px 0 -1px #00000066,0 18px 28px #000a;transition:transform .2s}
+.book:hover{transform:translateY(-8px) rotate(-1deg)}
+.book::before{content:"";position:absolute;inset:12px 12px 12px 24px;border:2px solid var(--gold);border-radius:3px;opacity:.8}
+.book .t{position:absolute;left:34px;right:22px;top:36px;font:700 19px/1.25 Cinzel,serif;color:var(--gold);word-break:break-word;max-height:100px;overflow:hidden}
+.book .d{position:absolute;left:34px;right:22px;top:128px;font:500 20px Caveat,cursive;opacity:.85}
+.chain{position:absolute;left:-6px;right:-6px;top:172px;height:16px;background:radial-gradient(ellipse 9px 6px at 50% 50%,#0000 3px,var(--gold) 3.6px 6px,#0000 6.6px) 0 0/16px 16px repeat-x;filter:drop-shadow(0 2px 1px #000a)}
+.lock{position:absolute;left:50%;top:164px;width:34px;height:40px;margin-left:-17px;border-radius:6px;background:linear-gradient(135deg,#f3d273,#a67c1e);box-shadow:0 3px 6px #000a}
+.lock::before{content:"";position:absolute;left:7px;top:-14px;width:20px;height:18px;border:4px solid #c89a2c;border-bottom:0;border-radius:12px 12px 0 0}
+.lock::after{content:"";position:absolute;left:14px;top:12px;width:6px;height:14px;background:#2b1a10;border-radius:3px 3px 1px 1px}
+.book.new{background:#0000;border:2px dashed var(--gold);box-shadow:none;font:700 70px/260px Cinzel,serif;color:var(--gold)}
+.book.new::before{display:none}
+.page{max-width:780px;margin:0 auto;padding:28px 34px 34px 64px;color:var(--ink);border-radius:4px 14px 14px 4px;box-shadow:0 20px 60px #000a;
+ background:linear-gradient(90deg,#b2442f33 0 2px,#0000 2px) 46px 0/100% 100% no-repeat,repeating-linear-gradient(#0000 0 33px,#7a5c3a55 33px 34px),#efe0bd}
+.page input,.page textarea{background:none;border:0;color:var(--ink);padding:0;margin:0;font:500 26px/34px Caveat,cursive;border-radius:0}
+.page input{font:700 34px/44px Cinzel,serif;border-bottom:2px solid #7a5c3a;margin-bottom:10px}
+.page textarea{min-height:52vh;resize:vertical}
+.page .meta{font:500 20px Caveat,cursive;opacity:.7}
+.voice{max-width:780px;margin:22px auto 0;padding:18px 22px;background:var(--stone);border:1px solid var(--gold-d);border-radius:10px}
+.voice h3{margin:0 0 8px;color:var(--gold)}
+.vnote{border-top:1px solid #8a6a1f66;padding:12px 0}
+.vnote p{margin:6px 0;font:500 22px/1.3 Caveat,cursive}
+.vnote button{padding:6px 12px;font-size:13px;margin-right:6px}
+.vnote audio{width:100%;margin-top:6px}
+button.rec{background:linear-gradient(#e0707c,#a8323f);color:#fff;border-color:#e0707c}
+.moods,.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin:14px 0}
+.mood{padding:4px 10px;font-size:26px;background:#0004;border:1px solid var(--gold-d)}.mood.on{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.prompt{max-width:640px;margin:0 auto 10px;padding:14px 20px;border:1px solid var(--gold-d);border-radius:10px;background:#0003;text-align:center}
+.prompt .q{font:700 26px/1.3 Caveat,cursive;margin:4px 0 10px}.prompt button{margin:0 4px}
+.tools input{max-width:420px}.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.chip{padding:3px 12px;font-size:13px;background:none;color:var(--gold)}.chip.on{background:var(--gold);color:var(--ink)}
+.pin{position:absolute;top:14px;right:28px;color:var(--gold);font-size:22px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:560px;margin:14px auto;text-align:center}
+.day{min-height:58px;padding:4px;border:1px solid #8a6a1f66;border-radius:6px;font-size:24px;position:relative}.day small{position:absolute;top:2px;left:5px;font-size:11px;opacity:.7}
+.m1{background:#6b2330}.m2{background:#6b4a23}.m3{background:#555}.m4{background:#2f5a3a}.m5{background:#2b6b4f}
+.graph{max-width:620px;margin:10px auto;padding:10px;border:1px solid var(--gold-d);border-radius:8px}
+.grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}.grid figure{margin:0;width:150px}.grid img{width:150px;height:110px;object-fit:cover;border-radius:6px;border:1px solid var(--gold-d);background:#0005}
+.grid button{padding:4px 10px;font-size:12px;margin-top:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main id="app" class="wrap"></main>
+<script>
+const enc=new TextEncoder(),dec=new TextDecoder(),S={};
+const b64=u=>{let s='';for(const x of new Uint8Array(u))s+=String.fromCharCode(x);return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const hex=u=>[...new Uint8Array(u)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
+const aesKey=raw=>crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt']);
+async function pbkdf2(pw,salt,iter){const k=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);
+ return crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:iter,hash:'SHA-256'},k,256)}
+const authSecret=(p,s)=>pbkdf2(p,'auth'+s,300000).then(b64), kekFrom=(p,s)=>pbkdf2(p,'kek'+s,600000).then(aesKey);
+const normRK=r=>r.replace(/[^a-z0-9]/gi,'').toUpperCase();
+const rkKey=async r=>aesKey(await crypto.subtle.digest('SHA-256',enc.encode(normRK(r))));
+const newRK=()=>hex(rnd(16)).toUpperCase().match(/.{4}/g).join('-');
+async function seal(key,bytes){const iv=rnd(12);return b64(iv)+'.'+b64(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,bytes))}
+const open=async(key,s)=>{const[i,c]=s.split('.');return crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(i)},key,unb64(c))};
+async function buildKeys(p,raw,rk=newRK()){const a=hex(rnd(16)),k=hex(rnd(16));
+ return{rk,body:{auth_salt:a,auth_secret:await authSecret(p,a),kek_salt:k,wrapped_pw:await seal(await kekFrom(p,k),raw),wrapped_rk:await seal(await rkKey(rk),raw)}}}
+const PW=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/, PWMSG='Use at least 8 characters with an uppercase letter, a lowercase letter, a number and a special character.';
+
+async function api(path,method='GET',body){
+ const r=await fetch('/api'+path,{method,headers:{'Content-Type':'application/json',...(S.token?{Authorization:'Bearer '+S.token}:{})},body:body&&JSON.stringify(body)});
+ const j=await r.json().catch(()=>({}));
+ if(r.status===401&&S.token){S.token=null;authView('login','Your session ended. Please log in again.')}
+ if(!r.ok)throw new Error(typeof j.detail==='string'?j.detail:'Check your details and try again.');return j}
+const h=(t,a={},...c)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a))k.startsWith('on')?e.addEventListener(k.slice(2),v):k==='class'?e.className=v:e.setAttribute(k,v);e.append(...c);return e};
+const mount=(...n)=>document.getElementById('app').replaceChildren(...n);
+const guard=(msg,fn)=>async e=>{e?.preventDefault?.();msg.className='msg';msg.textContent='';try{await fn()}catch(x){msg.textContent=x.message}};
+
+function authView(mode='login',note=''){
+ const msg=h('p',{class:'msg',role:'alert'},note);
+ const nick=h('input',{placeholder:'Nickname',autocomplete:'username',required:''});
+ const email=h('input',{type:'email',placeholder:'Email (only used for password reset)',autocomplete:'email',required:''});
+ const pw=h('input',{type:'password',placeholder:'Password',autocomplete:mode==='login'?'current-password':'new-password',required:''});
+ const go=guard(msg,async()=>{
+  const n=nick.value.trim(),p=pw.value;
+  if(mode==='forgot'){await api('/forgot','POST',{email:email.value});msg.className='msg ok';msg.textContent='If that email is registered, a reset link is on its way. Open it, choose a new password, then come back here and log in.';return}
+  if(mode==='register'){if(!PW.test(p))throw new Error(PWMSG);
+   const raw=rnd(32),k=await buildKeys(p,raw),r=await api('/register','POST',{nick:n,email:email.value,...k.body});
+   S.dek=await aesKey(raw);S.token=r.token;S.nick=r.nick;S.lock=r;armLock();return recoveryView(k.rk,dash)}
+  const {auth_salt}=await api('/salt/'+encodeURIComponent(n));
+  const r=await api('/login','POST',{nick:n,auth_secret:await authSecret(p,auth_salt)});
+  S.dek=await aesKey(await open(await kekFrom(p,r.kek_salt),r.wrapped_pw));S.token=r.token;S.nick=r.nick;S.lock=r;armLock();dash()});
+ const title={login:'Enter your notebooks',register:'Create your vault',forgot:'Reset your password'}[mode];
+ mount(h('form',{class:'card',onsubmit:go},h('h1',{},'PrivYou'),h('p',{class:'sub'},title),
+  ...(mode==='forgot'?[email]:[nick,...(mode==='register'?[email]:[]),pw]),
+  ...(mode==='register'?[h('p',{class:'hint'},PWMSG)]:[]),msg,
+  h('div',{class:'row'},h('button',{type:'submit'},{login:'Unlock',register:'Create account',forgot:'Send reset link'}[mode]),
+   h('span',{},mode!=='login'?h('a',{class:'lnk',onclick:()=>authView('login')},'Back to login'):h('a',{class:'lnk',onclick:()=>authView('register')},'New here? Register'))),
+  mode==='login'?h('p',{class:'hint'},h('a',{class:'lnk',onclick:()=>authView('forgot')},'Forgot password?')):''))}
+
+function recoveryView(rk,next,why='Your notebooks are encrypted so only you can read them. If you ever forget your password, this recovery key is the only way to keep them readable.'){
+ const ok=h('input',{type:'checkbox',id:'ok',style:'width:auto;margin-right:8px'}),go=h('button',{disabled:''},'Continue');
+ ok.onchange=()=>go.disabled=!ok.checked;go.onclick=next;
+ mount(h('div',{class:'card'},h('h1',{},'Recovery key'),h('p',{},why),h('div',{class:'rk'},rk),
+  h('button',{class:'ghost',onclick:()=>{const a=h('a',{href:URL.createObjectURL(new Blob(['PrivYou recovery key for '+S.nick+':\n'+rk+'\n'])),download:'privyou-recovery-key.txt'});a.click()}},'Download key'),
+  h('div',{class:'row'},h('label',{for:'ok'},ok,'I have saved my recovery key'),go)))}
+
+async function resetView(token){
+ const msg=h('p',{class:'msg',role:'alert'});let info;
+ try{info=await api('/reset/'+token)}catch(x){return authView('forgot',x.message)}
+ const pw=h('input',{type:'password',placeholder:'New password',autocomplete:'new-password',required:''}),rk=h('input',{placeholder:'Recovery key (optional)'});
+ mount(h('form',{class:'card',onsubmit:guard(msg,async()=>{
+  if(!PW.test(pw.value))throw new Error(PWMSG);
+  let raw,wipe=false,key;
+  if(rk.value.trim()){try{raw=new Uint8Array(await open(await rkKey(rk.value),info.wrapped_rk));key=rk.value}catch{throw new Error('That recovery key does not match this account.')}}
+  else{if(!confirm('Without your recovery key, your existing notebooks cannot be opened and will be deleted. Continue?'))return;raw=rnd(32);wipe=true}
+  const k=await buildKeys(pw.value,raw,key);await api('/reset','POST',{token,wipe,...k.body});
+  history.replaceState(null,'',location.pathname);S.nick=info.nick;
+  const back=()=>authView('login','Password changed. Log in with your new password.');wipe?recoveryView(k.rk,back,'Your vault was reset. Save this new recovery key.'):back()})},
+  h('h1',{},'New password'),h('p',{class:'sub'},'Welcome back, '+info.nick),pw,h('p',{class:'hint'},PWMSG),rk,
+  h('p',{class:'hint'},'Enter your recovery key to keep your existing notebooks.'),msg,h('div',{class:'row'},h('button',{type:'submit'},'Save new password'))))}
+
+const QUOTES=["Fall seven times, stand up eight.","This too shall pass, and you will have grown.","Small steps every day still reach the mountain.","You are stronger than the storm you are in.","The night is darkest just before the dawn.","Begin where you are; use what you have.","Courage is going on when you are afraid.","Every ending plants the seed of a beginning.","Be gentle with yourself; you are still learning.","Hard roads often lead to beautiful places.","You have survived every bad day so far.","Progress, not perfection.","What you seek is also seeking you.","Keep going; your future self is cheering for you.","Even the longest journey starts with one breath.","Rest if you must, but do not quit.","Your story is not over yet.","Light finds a way through the smallest crack.","You are allowed to start again.","Storms make trees take deeper roots.","One good thing today is enough.","Believe you can, and you are halfway there.","The treasure you want is on the other side of effort.","Patience turns difficulty into wisdom.","You don't have to see the whole staircase, just the first step.","Today is a fresh page. Write something kind.","Your pain is real, and so is your strength.","Doors you cannot see are waiting to open.","Be proud of how far you have come.","Keep going. Morning always arrives."];
+function daily(a,salt){const d=new Date(),day=Math.floor((d-d.getTimezoneOffset()*6e4)/864e5),L=a.length,cycle=Math.floor(day/L);
+ let s=(cycle*2654435761+salt)>>>0;const r=()=>{s=s+0x6D2B79F5>>>0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+ const o=[...a.keys()];for(let i=L-1;i>0;i--){const j=Math.floor(r()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return a[o[day%L]]}
+const quoteOfDay=()=>daily(QUOTES,0);
+
+const COLORS=['#7b1e2b','#1f6b4f','#1f3f7a','#5b2c83','#8a5a1c','#0f5560'];
+const dayKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const MOODS=['😞','😕','😐','🙂','😄'],MN=['Very low','Low','Okay','Good','Great'];
+const PROMPTS=["What made you smile today?","What are you grateful for right now?","What is one thing you are proud of this week?","What is weighing on your mind, and what would help?","Describe a moment today that you want to remember.","What would you tell your younger self?","What is one small step toward a goal you care about?","Who made a difference to you recently, and how?","What are you looking forward to?","What did you learn about yourself lately?","Describe your perfect ordinary day.","What do you need to forgive yourself for?","Which fear would you like to loosen?","What gave you energy today, and what drained it?","Write about a place where you feel safe.","What do you want more of in your life?","What do you want less of?","Which small joy do you often overlook?","What hard time have you already gotten through?","How do you want to feel tomorrow?","What would you do if you were not afraid?","Write a kind note to yourself.","What are three things that went well today?","What boundary do you need to set or keep?","Describe a person you admire, and why.","What does rest look like for you?","What dream have you not said out loud yet?","What has changed for you this year?","What would make tomorrow a good day?","What are you ready to let go of?"];
+async function loadMeta(){const r=await api('/meta');S.meta={moods:{},nb:{},...(r.enc_data?JSON.parse(dec.decode(await open(S.dek,r.enc_data))):{})}}
+const saveMeta=async()=>api('/meta','PUT',{enc_data:await seal(S.dek,enc.encode(JSON.stringify(S.meta)))});
+
+let idle;
+function armLock(){clearTimeout(idle);if(S.dek)idle=setTimeout(lock,10*60*1000)} // 10 minutes of inactivity
+['click','keydown','mousemove','touchstart','scroll'].forEach(e=>addEventListener(e,armLock,{passive:true}));
+function lock(){if(!S.dek)return;const li=S.lock,nick=S.nick;S.dek=S.meta=S.nbs=null;
+ const msg=h('p',{class:'msg',role:'alert'}),pw=h('input',{type:'password',placeholder:'Password',autocomplete:'current-password',required:''});
+ mount(h('form',{class:'card',onsubmit:guard(msg,async()=>{let raw;
+   try{raw=await open(await kekFrom(pw.value,li.kek_salt),li.wrapped_pw)}catch{throw new Error('That password is not correct.')}
+   S.dek=await aesKey(raw);armLock();dash()})},
+  h('h1',{},'Vault locked'),h('p',{class:'sub'},'Locked after 10 minutes of inactivity. Enter your password, '+nick+'.'),pw,msg,
+  h('div',{class:'row'},h('button',{type:'submit'},'Unlock'),h('a',{class:'lnk',onclick:()=>{for(const k in S)delete S[k];authView('login')}},'Log out'))))}
+
+async function dash(){
+ let list;try{list=await api('/notebooks');if(!S.meta)await loadMeta()}catch{return}
+ S.nbs=[];for(const n of list){let t='Locked page',c='';try{t=dec.decode(await open(S.dek,n.enc_title));c=dec.decode(await open(S.dek,n.enc_content))}catch{}S.nbs.push({...n,t,c})}
+ renderDash()}
+
+function renderDash(){
+ const meta=n=>S.meta.nb[n.id]||{tags:[],pin:false},today=dayKey(new Date()),prompt=daily(PROMPTS,7);let tag='';
+ const shelf=h('div',{class:'shelf'}),chips=h('div',{class:'chips'}),q=h('input',{type:'search',placeholder:'Search all your notebooks…','aria-label':'Search notebooks'});
+ const add=h('button',{class:'book new','aria-label':'Create new notebook',onclick:()=>editor()},'+');
+ const book=n=>h('button',{class:'book',style:'--c:'+COLORS[S.nbs.indexOf(n)%COLORS.length],'aria-label':'Open notebook '+n.t,onclick:()=>editor(n)},
+  h('span',{class:'t'},n.t),h('span',{class:'d'},new Date(n.created_at).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})),...(meta(n).pin?[h('span',{class:'pin'},'★')]:[]),h('i',{class:'chain'}),h('i',{class:'lock'}));
+ const fill=()=>{const term=q.value.trim().toLowerCase(),all=[...new Set(S.nbs.flatMap(n=>meta(n).tags))].sort();
+  chips.replaceChildren(...all.map(t=>h('button',{class:'chip'+(t===tag?' on':''),onclick:()=>{tag=tag===t?'':t;fill()}},'#'+t)));
+  const vis=S.nbs.filter(n=>(!tag||meta(n).tags.includes(tag))&&(!term||(n.t+' '+n.c+' '+meta(n).tags.join(' ')).toLowerCase().includes(term))).sort((a,b)=>meta(b).pin-meta(a).pin);
+  shelf.replaceChildren(...vis.map(book),...(term||tag?(vis.length?[]:[h('p',{class:'hint'},'No notebooks match.')]):[add]))};
+ q.oninput=fill;fill();
+ const moods=h('div',{class:'moods'},h('span',{},'How are you feeling today?'),...MOODS.map((e,i)=>h('button',{class:'mood'+(S.meta.moods[today]===i+1?' on':''),'aria-label':MN[i],title:MN[i],onclick:async()=>{S.meta.moods[today]=i+1;await saveMeta();renderDash()}},e)),
+  h('button',{class:'ghost',onclick:()=>moodView(new Date().getFullYear(),new Date().getMonth())},'Mood journey'));
+ mount(h('div',{class:'top'},h('h2',{},'PrivYou'),h('button',{class:'ghost',onclick:()=>{for(const k in S)delete S[k];authView('login')}},'Lock & leave')),
+  h('div',{class:'hello'},h('h1',{},'Open sesame, '+S.nick),h('blockquote',{},quoteOfDay())),
+  h('div',{class:'prompt'},h('div',{class:'hint'},'Today’s writing prompt'),h('p',{class:'q'},prompt),
+   h('button',{onclick:()=>startPrompt(prompt,false)},'Write'),h('button',{class:'ghost',onclick:()=>startPrompt(prompt,true)},'Answer by voice')),
+  moods,h('div',{class:'tools'},q),chips,shelf)}
+
+async function startPrompt(q,voice){const d=new Date().toLocaleDateString(undefined,{day:'numeric',month:'short'});
+ const n=await api('/notebooks','POST',{enc_title:await seal(S.dek,enc.encode('Reflection · '+d)),enc_content:await seal(S.dek,enc.encode('Prompt: '+q+'\n\n'))});
+ await editor(n);if(voice)document.querySelector('.voice')?.scrollIntoView({behavior:'smooth'})}
+
+function moodView(y,m){
+ const first=new Date(y,m,1),days=new Date(y,m+1,0).getDate(),pad=(first.getDay()+6)%7;
+ const vals=[...Array(days)].map((_,i)=>S.meta.moods[y+'-'+String(m+1).padStart(2,'0')+'-'+String(i+1).padStart(2,'0')]),got=vals.filter(Boolean);
+ const avg=got.length?(got.reduce((a,b)=>a+b)/got.length).toFixed(1):null;
+ const cal=h('div',{class:'cal'},...['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>h('b',{},d)),...Array(pad).fill(0).map(()=>h('span',{})),
+  ...vals.map((v,i)=>h('span',{class:'day'+(v?' m'+v:''),title:v?MN[v-1]:''},h('small',{},i+1),v?MOODS[v-1]:'')));
+ const pts=vals.map((v,i)=>v&&[i*20+10,110-(v-1)*25]).filter(Boolean),g=h('div',{class:'graph'});
+ g.innerHTML=`<svg viewBox="0 0 ${days*20} 120" role="img" aria-label="Mood graph for the month" style="width:100%;height:auto"><polyline fill="none" stroke="#d9ad45" stroke-width="2" points="${pts.map(p=>p.join(',')).join(' ')}"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#d9ad45"/>`).join('')}</svg>`;
+ const go=k=>{const d=new Date(y,m+k,1);moodView(d.getFullYear(),d.getMonth())};
+ mount(h('div',{class:'top'},h('button',{class:'ghost',onclick:dash},'Back to treasury'),h('span',{}),h('span',{})),
+  h('div',{class:'hello'},h('h1',{},first.toLocaleDateString(undefined,{month:'long',year:'numeric'})),
+   h('p',{class:'hint'},avg?'Average mood '+avg+' of 5 across '+got.length+' check-ins':'No check-ins this month yet.')),
+  h('div',{class:'row',style:'justify-content:center'},h('button',{class:'ghost',onclick:()=>go(-1)},'Previous'),h('button',{class:'ghost',onclick:()=>go(1)},'Next')),cal,g)}
+
+const loadRecs=async n=>{const l=await api('/notebooks/'+n.id+'/recordings');for(const r of l){try{r.meta=JSON.parse(dec.decode(await open(S.dek,r.enc_meta)))}catch{r.meta={}}}return l};
+async function photoSection(n,recs){ // photos are resized and re-encoded in the browser (this also strips location data), then encrypted
+ const box=h('div',{class:'voice'},h('h3',{},'Photos'));
+ if(!n){box.append(h('p',{class:'hint'},'Save this notebook once, then you can attach photos.'));return box}
+ const grid=h('div',{class:'grid'}),st=h('p',{class:'msg',role:'status'});
+ const show=r=>{const fig=h('figure',{}),img=h('img',{alt:'Attached photo'});
+  api('/recordings/'+r.id).then(async({enc_audio})=>{img.src=URL.createObjectURL(new Blob([await open(S.dek,enc_audio)],{type:'image/jpeg'}))}).catch(()=>{});
+  fig.append(img,h('button',{class:'ghost',onclick:guard(st,async()=>{if(confirm('Delete this photo?')){await api('/recordings/'+r.id,'DELETE');fig.remove()}})},'Delete'));grid.append(fig)};
+ recs.filter(r=>r.meta.kind==='photo').forEach(show);
+ const file=h('input',{type:'file',accept:'image/*',hidden:'',onchange:guard(st,async()=>{const f=file.files[0];if(!f)return;
+  st.className='msg';st.textContent='Locking your photo…';
+  const bmp=await createImageBitmap(f),k=Math.min(1,1600/Math.max(bmp.width,bmp.height)),cv=h('canvas');cv.width=Math.round(bmp.width*k);cv.height=Math.round(bmp.height*k);
+  cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height);const blob=await new Promise(ok=>cv.toBlob(ok,'image/jpeg',.85));
+  const r=await api('/notebooks/'+n.id+'/recordings','POST',{enc_audio:await seal(S.dek,new Uint8Array(await blob.arrayBuffer())),
+   enc_meta:await seal(S.dek,enc.encode(JSON.stringify({kind:'photo'}))),enc_transcript:await seal(S.dek,enc.encode(''))});
+  show(r);file.value='';st.className='msg ok';st.textContent='Photo saved.'})});
+ box.append(h('button',{onclick:()=>file.click()},'Add photo'),file,st,grid);return box}
+
+let asr;
+async function transcribe(blob,say){ // runs fully in the browser: the audio never leaves your device unencrypted
+ if(!asr){const{pipeline}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2');
+  asr=await pipeline('automatic-speech-recognition','Xenova/whisper-tiny.en',{progress_callback:p=>{if(p.status==='progress')say('Downloading the speech model (first time only) '+Math.round(p.progress)+'%')}})}
+ say('Writing down what you said…');
+ const ctx=new AudioContext({sampleRate:16000});
+ const audio=(await ctx.decodeAudioData(await blob.arrayBuffer())).getChannelData(0);ctx.close();
+ return(await asr(audio,{chunk_length_s:30,stride_length_s:5})).text.trim()}
+const fmt=x=>Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0');
+
+async function voiceSection(n,insert,recs){
+ const box=h('div',{class:'voice'},h('h3',{},'Voice notes'));
+ if(!n){box.append(h('p',{class:'hint'},'Save this notebook once, then you can record voice notes in it.'));return box}
+ const list=h('div'),st=h('p',{class:'msg',role:'status'});
+ const item=async r=>{
+  const meta=JSON.parse(dec.decode(await open(S.dek,r.enc_meta))),text=dec.decode(await open(S.dek,r.enc_transcript));
+  const au=h('audio',{controls:'',hidden:''}),row=h('div',{class:'vnote'});
+  row.append(h('span',{class:'hint'},new Date(r.created_at).toLocaleString()+' · '+fmt(meta.dur)),
+   h('p',{},text||'(No words were picked up.)'),
+   h('button',{onclick:guard(st,async()=>{if(!au.src){const{enc_audio}=await api('/recordings/'+r.id);au.src=URL.createObjectURL(new Blob([await open(S.dek,enc_audio)],{type:meta.mime}))}au.hidden=false;au.play()})},'Play'),
+   ...(text?[h('button',{class:'ghost',onclick:()=>insert(text)},'Add to entry')]:[]),
+   h('button',{class:'ghost',onclick:guard(st,async()=>{if(confirm('Delete this voice note?')){await api('/recordings/'+r.id,'DELETE');row.remove()}})},'Delete'),au);
+  return row};
+ for(const r of recs.filter(r=>r.meta.kind!=='photo'))list.append(await item(r));
+ const btn=h('button',{class:'rec'},'● Record');let mr,chunks,t0,tick;
+ btn.onclick=async()=>{
+  if(mr&&mr.state==='recording')return mr.stop();
+  try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+   const mime=['audio/webm;codecs=opus','audio/mp4'].find(m=>MediaRecorder.isTypeSupported(m));
+   mr=new MediaRecorder(stream,mime?{mimeType:mime}:{});chunks=[];
+   mr.ondataavailable=e=>chunks.push(e.data);
+   mr.onstop=async()=>{clearInterval(tick);stream.getTracks().forEach(t=>t.stop());btn.disabled=true;btn.textContent='● Record';
+    const blob=new Blob(chunks,{type:mr.mimeType}),dur=(Date.now()-t0)/1000;let text='',ok=true;
+    try{try{text=await transcribe(blob,m=>st.textContent=m)}catch{ok=false}
+     st.className='msg';st.textContent='Locking your recording…';
+     const r=await api('/notebooks/'+n.id+'/recordings','POST',{enc_audio:await seal(S.dek,new Uint8Array(await blob.arrayBuffer())),
+      enc_meta:await seal(S.dek,enc.encode(JSON.stringify({mime:mr.mimeType,dur}))),enc_transcript:await seal(S.dek,enc.encode(text))});
+     list.append(await item(r));st.className='msg '+(ok?'ok':'');st.textContent=ok?'Recording and transcript saved.':'Recording saved, but the transcript could not be written.'}
+    catch(x){st.className='msg';st.textContent=x.message}
+    btn.disabled=false};
+   mr.start();t0=Date.now();btn.textContent='■ Stop';st.className='msg ok';tick=setInterval(()=>st.textContent='Recording '+fmt((Date.now()-t0)/1000),500)
+  }catch{st.className='msg';st.textContent='Microphone access is blocked. Allow it in your browser settings and try again.'}};
+ box.append(btn,st,list);return box}
+
+async function editor(n){
+ const msg=h('p',{class:'msg',role:'status'}),t=h('input',{placeholder:'Title this notebook','aria-label':'Title',maxlength:120}),a=h('textarea',{'aria-label':'Journal entry',placeholder:'Write here. Only you can read this.'}),host=h('div');
+ const mm=(n&&S.meta.nb[n.id])||{tags:[],pin:false};let recs=[];
+ const tags=h('input',{placeholder:'Tags, separated by commas (gratitude, dreams, goals)','aria-label':'Tags'}),pin=h('input',{type:'checkbox',id:'pin',style:'width:auto;margin-right:8px'});
+ tags.value=mm.tags.join(', ');pin.checked=mm.pin;
+ if(n){t.value=dec.decode(await open(S.dek,n.enc_title));a.value=dec.decode(await open(S.dek,n.enc_content));recs=await loadRecs(n)}
+ const insert=x=>{a.value+=(a.value?'\n\n':'')+x;msg.className='msg ok';msg.textContent='Added to your entry. Save the notebook to keep it.'};
+ const fillHost=async()=>host.replaceChildren(await voiceSection(n,insert,recs),await photoSection(n,recs));await fillHost();
+ const save=guard(msg,async()=>{if(!t.value.trim())throw new Error('Give your notebook a title first.');
+  const p={enc_title:await seal(S.dek,enc.encode(t.value.trim())),enc_content:await seal(S.dek,enc.encode(a.value))},isNew=!n;
+  n=n?await api('/notebooks/'+n.id,'PUT',p):await api('/notebooks','POST',p);
+  S.meta.nb[n.id]={tags:[...new Set(tags.value.split(',').map(x=>x.trim().toLowerCase().replace(/^#/,'')).filter(Boolean))],pin:pin.checked};await saveMeta();
+  msg.className='msg ok';msg.textContent='Saved and locked.';if(isNew){recs=[];await fillHost()}});
+ mount(h('div',{class:'top'},h('button',{class:'ghost',onclick:dash},'Back to treasury'),h('span',{}),h('span',{})),h('br'),
+  h('div',{class:'page'},t,h('div',{class:'meta'},n?'Created '+new Date(n.created_at).toLocaleString():'New notebook'),a),
+  h('div',{class:'row'},tags,h('label',{for:'pin'},pin,'Pin to the front')),msg,
+  h('div',{class:'row'},h('button',{onclick:save},'Save notebook'),n?h('button',{class:'ghost',onclick:async()=>{if(confirm('Delete this notebook, its voice notes and photos forever?')){await api('/notebooks/'+n.id,'DELETE');delete S.meta.nb[n.id];await saveMeta();dash()}}},'Delete'):''),host)}
+
+const m=location.hash.match(/^#reset=(.+)$/);m?resetView(m[1]):authView('login');
+</script></body></html>
